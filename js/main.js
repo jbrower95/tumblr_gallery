@@ -377,7 +377,7 @@ else {
 			gal.paintings = [];
 
 			var textureLoader = new THREE.TextureLoader();
-			textureLoader.crossOrigin = true;
+			textureLoader.crossOrigin = '';
 
 			var renderFont = false;
 
