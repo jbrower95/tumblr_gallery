@@ -1,7 +1,27 @@
 
 var tumblr = {
 	loadPosts: function(blogName, type, limit) {
-		var url = "https://" + blogName + ".tumblr.com/api/read/json?num=" + limit + "&type=" + type + "&callback=?";
+		var url;
+		console.log(blogName);
+		if (blogName.includes(".com")) {
+			// don't assume .tumblr.com
+			if (blogName.includes("://")) {
+				// they included the http:// thing
+				url = blogName;
+			} else {
+				// they included the https:// thing
+				url = "https://" + blogName; 
+			}
+		} else {
+			url = "https://" + blogName + ".tumblr.com";
+		}
+
+		if (url.slice(-1) == "/") {
+			// Remove the last /
+			url = url.substr(0, url.length - 1);
+		}
+
+		url = url + "/api/read/json?num=" + limit + "&type=" + type + "&callback=?";
 		console.log("[tumblr] Requesting URL: " + url);
 		return new Promise(function(resolve, reject) {
 			if (!blogName || !type || !limit) {
@@ -36,6 +56,7 @@ var tumblr = {
 						p["caption"] = post['slug'];
 						return p;
 					});
+					console.log("Loaded " + urls.length + " image urls.");
 					resolve(urls);
 				}
 			});
